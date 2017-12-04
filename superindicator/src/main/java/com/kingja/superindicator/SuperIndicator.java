@@ -10,6 +10,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class SuperIndicator extends View {
 
     private static final int DEFAULT_TEXT_SIZE = 20;
     private static final String TAG = "SuperIndicator";
-    private List<String> tabs;
+    private List<String> tabs=new ArrayList<>();
     private int width;
     private int height;
     private int perWith;
@@ -86,6 +87,7 @@ public class SuperIndicator extends View {
 
     public void setProgress(int progress) {
         this.progress = progress;
+        invalidate();
     }
 
     @Override
@@ -106,6 +108,7 @@ public class SuperIndicator extends View {
 
     public void setTabs(List<String> list) {
         this.tabs = list;
+        invalidate();
     }
 
     @Override
@@ -113,7 +116,6 @@ public class SuperIndicator extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         width = getMeasuredWidth();
         height = getMeasuredHeight();
-        perWith = width / tabs.size();
         drawTextY = indicatorMargin + indicatorPointSize + 0.5f * textHeight + offsetY;
 
     }
@@ -121,6 +123,10 @@ public class SuperIndicator extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (tabs.size() == 0) {
+            return;
+        }
+        perWith = width / tabs.size();
         for (int i = 0; i < tabs.size(); i++) {
             if (i <= progress) {
                 //normal
